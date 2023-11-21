@@ -27,8 +27,8 @@ namespace CarRentalManagement.Server.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetVehicles()
 		{
-			var makes = await _unitOfWork.Vehicles.GetAll();
-			return Ok(makes);
+			var Vehicles = await _unitOfWork.Vehicles.GetAll(includes: q => q.Include(x =>x.Make).Include(x => x.Model).Include(x => x.Colour));
+			return Ok(Vehicles);
 
 		}
 
@@ -36,27 +36,27 @@ namespace CarRentalManagement.Server.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> GetVehicle(int id)
 		{
-			var make = await _unitOfWork.Vehicles.Get(q => q.Id == id);
+			var vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
 
-			if (make == null)
+			if (vehicle == null)
 			{
 				return NotFound();
 			}
 
-			return Ok(make);
+			return Ok(vehicle);
 		}
 
 		// PUT: api/Vehicles/5
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutVehicle(int id, Vehicle make)
+		public async Task<IActionResult> PutVehicle(int id, Vehicle vehicle)
 		{
-			if (id != make.Id)
+			if (id != vehicle.Id)
 			{
 				return BadRequest();
 			}
 
-			_unitOfWork.Vehicles.Update(make);
+			_unitOfWork.Vehicles.Update(vehicle);
 			try
 			{
 				await _unitOfWork.Save(HttpContext);
@@ -79,12 +79,12 @@ namespace CarRentalManagement.Server.Controllers
 		// POST: api/Vehicles
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle make)
+		public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle)
 		{
-			await _unitOfWork.Vehicles.Insert(make);
+			await _unitOfWork.Vehicles.Insert(vehicle);
 			await _unitOfWork.Save(HttpContext);
 
-			return CreatedAtAction("GetVehicle", new { id = make.Id }, make);
+			return CreatedAtAction("GetVehicle", new { id = vehicle.Id }, vehicle);
 		}
 
 		// DELETE: api/Vehicles/5
@@ -92,8 +92,8 @@ namespace CarRentalManagement.Server.Controllers
 		public async Task<IActionResult> DeleteVehicle(int id)
 		{
 
-			var make = await _unitOfWork.Vehicles.Get(q => q.Id == id);
-			if (make == null)
+			var vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
+			if (vehicle == null)
 			{
 				return NotFound();
 			}
@@ -106,8 +106,8 @@ namespace CarRentalManagement.Server.Controllers
 
 		private async Task<bool> VehicleExists(int id)
 		{
-			var make = await _unitOfWork.Vehicles.Get(q => q.Id == id);
-			return make == null;
+			var vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
+			return vehicle == null;
 		}
 	}
 }
