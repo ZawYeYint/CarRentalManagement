@@ -5,6 +5,12 @@
 
 
 <h3 class="card-title">Car Customers</h3>
+<a href="/customers/create" class="btn btn-secondary">
+	<span class="oi oi-plus"></span>
+	Create New Customer
+</a>
+<br />
+<br />
 
 @if (Customers == null)
 {
@@ -27,37 +33,7 @@ else
 			{
 				<tr>
 					<td>@customer.DrivingLiscense</td>
-					<td>
-						<a href="/customers/view/@customer.Id" class="btn btn-primary">
-							<span class="oi oi-book"></span>
-						</a>
-
-
-						<a href="/customers/edit/@customer.Id" class="btn btn-warning">
-							<span class="oi oi-pencil"></span>
-						</a>
-
-						<button class="btn btn-danger" @onclick="@(()=>Delete(customer.Id))">
-							<span class="oi oi-delete"></span>
-						</button>
-					</td>
-
 					<td>@customer.ContactNumber</td>
-					<td>
-						<a href="/customers/view/@customer.Id" class="btn btn-primary">
-							<span class="oi oi-book"></span>
-						</a>
-
-
-						<a href="/customers/edit/@customer.Id" class="btn btn-warning">
-							<span class="oi oi-pencil"></span>
-						</a>
-
-						<button class="btn btn-danger" @onclick="@(()=>Delete(customer.Id))">
-							<span class="oi oi-delete"></span>
-						</button>
-					</td>
-
 					<td>@customer.EmailAddress</td>
 					<td>
 						<a href="/customers/view/@customer.Id" class="btn btn-primary">

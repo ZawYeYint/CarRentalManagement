@@ -1,0 +1,119 @@
+﻿@inject HttpClient _client
+
+<h3>booking</h3>
+
+<EditForm Model="@booking" OnValidSubmit="@OnValidSubmit">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+
+<fieldset disabled="@Disabled">
+	<div class="form-group">
+
+		<label>Vehicle: </label>
+
+		<div>
+			<InputSelect @bind-Value="booking.VehicleId" class="form-control">
+				<option value=" ">-- Select Vehicle --</option>
+				@if (Vehicles != null)
+				{
+					foreach (var vehicle in Vehicles)
+					{
+						<option value="@vehicle.Id">@vehicle.LiscensePlateNumber</option>
+					}
+				}
+			</InputSelect>
+			<ValidationMessage For="@(() => booking.VehicleId)" />
+		</div>
+	</div>
+
+
+	<div class="form-group">
+
+		<label>Customer: </label>
+
+		<div>
+			<InputSelect @bind-Value="booking.CustomerId" class="form-control">
+				<option value=" ">-- Select Customer --</option>
+				@if (Customers != null)
+				{
+					foreach (var customer in Customers)
+					{
+						<option value="@customer.Id">@customer.FirstName - @customer.DrivingLiscense</option>
+					}
+				}
+			</InputSelect>
+			<ValidationMessage For="@(() => booking.VehicleId)" />
+		</div>
+	</div>
+
+
+	<div class="form-group">
+
+		<label>DateOut: </label>
+
+		<div>
+			<InputDate @bind-Value="booking.DateOut" class="form-control">
+				<option value=" ">-- Select Date --</option>
+				@if (booking != null)
+				{
+					foreach (var booking in Bookings)
+					{
+						<option value="@booking.Id">@booking.DateOut</option>
+					}
+				}
+			</InputDate>
+			<ValidationMessage For="@(() => booking.VehicleId)" />
+		</div>
+	</div>
+
+
+
+	@if (booking.Id > 0)
+	{
+		<div class="form-group">
+			<label>Date In: </label>
+			<div>
+				<InputDate @bind-Value="@booking.DateIn" class="form-control" />
+				<ValidationMessage For="@(() => booking.DateIn)" />
+			</div>
+		</div>
+	}
+</fieldset>
+
+@if(!Disabled)
+{
+	<button type="submit" class="btn btn-success btn-block">
+		@ButtonText
+	</button>
+}
+	<BackToList Target="bookings" />
+</EditForm>
+
+@code
+{
+	[Parameter] public bool Disabled { get; set; } = false;
+	[Parameter] public Booking? booking { get; set; }
+	[Parameter] public string ButtonText { get; set; } = "Save";
+	[Parameter] public EventCallback OnValidSubmit { get; set; }
+
+	private IList<Vehicle>? Vehicles;
+	private IList<Customer>? Customers;
+	private IList<Booking>? Bookings;
+
+
+
+
+
+	protected async override Task OnInitializedAsync()
+	{
+		Vehicles = await _client.GetFromJsonAsync<List<Vehicle>>($"{Endpoints.VehiclesEndpoint}");
+		Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+		Bookings = await _client.GetFromJsonAsync<List<Booking>>($"{Endpoints.BookingsEndpoint}");
+
+
+
+
+	}
+
+
+}

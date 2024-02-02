@@ -1,10 +1,11 @@
-﻿using CarRentalManagement.Server.Models;
+﻿////using CarRentalManagement.Server.Models;
 using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using CarRentalManagement.Shared.Domain;
 using CarRentalManagement.Server.Configurations.Entities;
+using CarRentalManagement.Server.Models;
 
 namespace CarRentalManagement.Server.Data
 {

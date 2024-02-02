@@ -5,6 +5,12 @@
 
 
 <h3 class="card-title">Car Makes</h3>
+<a href="/makes/create" class="btn btn-secondary">
+	<span class="oi oi-plus"></span>
+	Create New Make
+</a>
+<br />
+<br />
 
 @if (Makes == null)
 {
@@ -21,23 +27,22 @@ else
 			</tr>
 		</thead>
 		<tbody>
-			@foreach(var make in Makes)
+			@foreach (var make in Makes)
 			{
 				<tr>
 					<td>@make.Name</td>
 					<td>
 						<a href="/makes/view/@make.Id" class="btn btn-primary">
 							<span class="oi oi-book"></span>
-							</a>
-
+						</a>
 
 						<a href="/makes/edit/@make.Id" class="btn btn-warning">
 							<span class="oi oi-pencil"></span>
-							</a>
+						</a>
 
-							<button class="btn btn-danger" @onclick="@(()=>Delete(make.Id))">
-								<span class="oi oi-delete"></span>
-							</button>
+						<button class="btn btn-danger" @onclick="@(()=>Delete(make.Id))">
+							<span class="oi oi-delete"></span>
+						</button>
 					</td>
 
 				</tr>
@@ -49,10 +54,10 @@ else
 
 }
 
-<br/>
+<br />
 
 
-@code 
+@code
 {
 	private List<Make>? Makes;
 
@@ -63,14 +68,14 @@ else
 
 	async Task Delete(int makeId)
 	{
-		if(Makes!=null)
+		if (Makes != null)
 		{
 
-			var make = Makes.First(q=>q.Id == makeId);
+			var make = Makes.First(q => q.Id == makeId);
 			var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete{make.Name}?");
 			if (confirm)
 			{
-				
+
 				await _client.DeleteAsync($"{Endpoints.MakesEndpoint}/{makeId}");
 				await OnInitializedAsync();
 			}
